@@ -4,9 +4,12 @@ import {
   EditorState,
   RichUtils,
   getDefaultKeyBinding,
+  KeyBindingUtil,
   convertToRaw,
+  Modifier,
 } from "draft-js";
 import "draft-js/dist/Draft.css";
+import { CSSTransition } from "react-transition-group";
 
 import {
   EditorButtons,
@@ -16,6 +19,8 @@ import {
 } from "./Notes.styled";
 import { NoteFormButton } from "../styles/Button.styled";
 
+import Dropdown, { DropdownBtn } from "../ui/Dropdown";
+
 const TextEditor = ({ onSave, onClose, selectedDate }) => {
   const newDateString = `${selectedDate.toLocaleString("en-us", {
     weekday: "short",
@@ -23,10 +28,25 @@ const TextEditor = ({ onSave, onClose, selectedDate }) => {
     month: "long",
   })}`;
 
+  // Color Dropdown
+  const [showColors, setShowColors] = useState(false);
+  const nodeRef1 = useRef(null);
+
   const [editorState, setEditorState] = useState(() =>
     EditorState.createEmpty()
   );
 
+  const COLORS = [
+    { label: "Red", style: "red" },
+    { label: "Orange", style: "orange" },
+    { label: "Yellow", style: "yellow" },
+    { label: "Green", style: "green" },
+    { label: "Blue", style: "blue" },
+    { label: "Indigo", style: "indigo" },
+    { label: "Violet", style: "violet" },
+  ];
+
+  // Focus Editor
   const editor = useRef();
 
   function focusEditor() {
@@ -37,8 +57,22 @@ const TextEditor = ({ onSave, onClose, selectedDate }) => {
     focusEditor();
   }, []);
 
-  const handleKeyCommand = (command, editorState) => {
+  // Handle Key Command
+  const handleKeyCommand = (command) => {
     const newState = RichUtils.handleKeyCommand(editorState, command);
+
+    if (!newState && command === "strikethrough") {
+      setEditorState(RichUtils.toggleInlineStyle(editorState, "STRIKETHROUGH"));
+    }
+
+    if (!newState && command === "unordered-list") {
+      setEditorState(
+        RichUtils.toggleBlockType(editorState, "unordered-list-item")
+      );
+    }
+    if (!newState && command === "highlight") {
+      setEditorState(RichUtils.toggleInlineStyle(editorState, "HIGHLIGHT"));
+    }
 
     if (newState) {
       setEditorState(newState);
@@ -48,18 +82,80 @@ const TextEditor = ({ onSave, onClose, selectedDate }) => {
     return "not-handled";
   };
 
-  const myKeyBindingFn = (e) => {
-    if (e.keyCode === 9) {
-      return "text-indent";
+  // Key Binding Function
+  function keyBindingFunction(event) {
+    if (
+      KeyBindingUtil.hasCommandModifier(event) &&
+      event.shiftKey &&
+      event.key === "x"
+    ) {
+      return "strikethrough";
     }
-    return getDefaultKeyBinding(e);
-  };
+    if (
+      KeyBindingUtil.hasCommandModifier(event) &&
+      event.shiftKey &&
+      event.key === "8"
+    ) {
+      return "unordered-list";
+    }
+    if (
+      KeyBindingUtil.hasCommandModifier(event) &&
+      event.shiftKey &&
+      event.key === "h"
+    ) {
+      return "highlight";
+    }
+
+    return getDefaultKeyBinding(event);
+  }
 
   const toggleStyle = (e) => {
     e.preventDefault();
-    setEditorState(
-      RichUtils.toggleInlineStyle(editorState, e.currentTarget.dataset.style)
+
+    const dataStyle = e.currentTarget.dataset.style;
+
+    if (
+      dataStyle === "BOLD" ||
+      dataStyle === "ITALIC" ||
+      dataStyle === "UNDERLINE"
+    ) {
+      console.log(dataStyle);
+      setEditorState(RichUtils.toggleInlineStyle(editorState, dataStyle));
+
+      return;
+    }
+
+    // Let's just allow one color at a time. Turn off all active colors.
+    const selection = editorState.getSelection();
+
+    const nextContentState = Object.keys(styleMap).reduce(
+      (contentState, color) => {
+        return Modifier.removeInlineStyle(contentState, selection, color);
+      },
+      editorState.getCurrentContent()
     );
+
+    let nextEditorState = EditorState.push(
+      editorState,
+      nextContentState,
+      "change-inline-style"
+    );
+
+    const currentStyle = editorState.getCurrentInlineStyle();
+
+    // Unset style override for current color.
+    if (selection.isCollapsed()) {
+      nextEditorState = currentStyle.reduce((state, color) => {
+        return RichUtils.toggleInlineStyle(state, color);
+      }, nextEditorState);
+    }
+
+    // If the color is being toggled on, apply it.
+    if (!currentStyle.has(dataStyle)) {
+      nextEditorState = RichUtils.toggleInlineStyle(nextEditorState, dataStyle);
+    }
+
+    setEditorState(nextEditorState);
   };
 
   const toggleBlockType = (e) => {
@@ -70,6 +166,33 @@ const TextEditor = ({ onSave, onClose, selectedDate }) => {
     );
   };
 
+  const styleMap = {
+    HIGHLIGHT: {
+      backgroundColor: "#faed27",
+    },
+    red: {
+      color: "red",
+    },
+    orange: {
+      color: "orange",
+    },
+    yellow: {
+      color: "yellow",
+    },
+    green: {
+      color: "green",
+    },
+    blue: {
+      color: "blue",
+    },
+    indigo: {
+      color: "indigo",
+    },
+    violet: {
+      color: "violet",
+    },
+  };
+
   const saveText = () => {
     // convertToRaw()
     const contentState = editorState.getCurrentContent();
@@ -78,34 +201,93 @@ const TextEditor = ({ onSave, onClose, selectedDate }) => {
     onSave(rawContentState);
   };
 
+  const hasStyle = (style) => editorState.getCurrentInlineStyle().has(style);
+  const hasBlockType = (blocktype) =>
+    RichUtils.getCurrentBlockType(editorState) === blocktype;
+
   return (
     <>
       <EditorButtons>
-        <EditorBtn onMouseDown={toggleStyle} data-style="BOLD">
+        <EditorBtn
+          onMouseDown={toggleStyle}
+          data-style="BOLD"
+          active={hasStyle("BOLD")}
+        >
           <span>Bold</span>
         </EditorBtn>
-        <EditorBtn onMouseDown={toggleStyle} data-style="ITALIC">
+        <EditorBtn
+          onMouseDown={toggleStyle}
+          data-style="ITALIC"
+          active={hasStyle("ITALIC")}
+        >
           <span>Italic</span>
         </EditorBtn>
-        <EditorBtn onMouseDown={toggleStyle} data-style="UNDERLINE">
+        <EditorBtn
+          onMouseDown={toggleStyle}
+          data-style="UNDERLINE"
+          active={hasStyle("UNDERLINE")}
+        >
           <span>Underline</span>
         </EditorBtn>
         <EditorBtn
           onMouseDown={toggleBlockType}
           data-blocktype="unordered-list-item"
+          active={hasBlockType("unordered-list-item")}
         >
           <span>UL</span>
         </EditorBtn>
         <EditorBtn
           onMouseDown={toggleBlockType}
           data-blocktype="ordered-list-item"
+          active={hasBlockType("ordered-list-item")}
         >
           <span>OL</span>
         </EditorBtn>
-        <EditorBtn onMouseDown={toggleStyle} data-blocktype="COLOR">
-          <span>Color</span>
-        </EditorBtn>
-        <EditorBtn onMouseDown={toggleStyle} data-blocktype="HIGHLIGHT">
+        <div>
+          <EditorBtn onClick={() => setShowColors((prev) => !prev)}>
+            <span>Color</span>
+          </EditorBtn>
+
+          <CSSTransition
+            in={showColors}
+            timeout={200}
+            classNames="fadeSlideDown"
+            unmountOnExit
+            nodeRef={nodeRef1}
+          >
+            <Dropdown ref={nodeRef1}>
+              {COLORS.map((c) => (
+                <EditorBtn
+                  key={c.style}
+                  data-style={c.style}
+                  light
+                  horizontal
+                  onMouseDown={toggleStyle}
+                  active={hasStyle(c.style)}
+                >
+                  <span>{c.label}</span>
+                </EditorBtn>
+              ))}
+
+              {/* <EditorBtn
+                data-style="COLOR"
+                light
+                horizontal
+                onMouseDown={toggleStyle}
+                active={hasStyle("COLOR")}
+              >
+                <span>Red</span>
+              </EditorBtn>
+              <EditorBtn data-style="COLOR" light horizontal>
+                <span>Blue</span>
+              </EditorBtn>
+              <EditorBtn data-style="COLOR" light horizontal>
+                <span>Green</span>
+              </EditorBtn> */}
+            </Dropdown>
+          </CSSTransition>
+        </div>
+        <EditorBtn onMouseDown={toggleStyle} data-style="HIGHLIGHT">
           <span>Highlight</span>
         </EditorBtn>
       </EditorButtons>
@@ -116,10 +298,11 @@ const TextEditor = ({ onSave, onClose, selectedDate }) => {
         </div>
         <Editor
           ref={editor}
+          customStyleMap={styleMap}
           editorState={editorState}
           onChange={setEditorState}
           handleKeyCommand={handleKeyCommand}
-          keyBindingFn={myKeyBindingFn}
+          keyBindingFn={keyBindingFunction}
           placeholder="Enter something here"
         />
       </EditorWrapper>

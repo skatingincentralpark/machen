@@ -136,23 +136,44 @@ export const EditorWrapper = styled.div`
 export const EditorButtons = styled.div`
   padding: 1rem 0.25rem;
   min-width: 3rem;
+  z-index: 4;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  gap: 1rem;
   border-radius: 15px 0 0 15px;
   height: 100%;
   background: ${({ theme }) => theme.colors.body};
+
+  & > div {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    position: relative;
+  }
+
+  & > div > button {
+    width: 100%;
+  }
 `;
 
 export const EditorBtn = styled(Button)`
   border-radius: 6px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 0.5rem;
+  margin-right: ${({ horizontal }) => horizontal && "0.5rem"};
+  padding: 0.25rem 0.5rem;
+  background: ${({ active }) => active && "white"};
+  background: ${({ light, theme }) => (light ? theme.colors.body : "")};
+  background: ${({ light, active }) => (light && active ? "red" : "")};
 
   & > span {
     writing-mode: vertical-rl;
     transform: rotate(180deg);
     text-orientation: mixed;
-    color: white;
+    color: ${({ active, theme }) => (active ? theme.colors.body : "white")};
+    color: ${({ light, active }) => (light && active ? "white" : "")};
   }
 
   &:active {
