@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { CSSTransition } from "react-transition-group";
 
 import {
@@ -28,7 +28,7 @@ const CalendarItems = () => {
   const nodeRef1 = useRef(null);
   const nodeRef2 = useRef(null);
 
-  function createCalendar(year, month) {
+  const createCalendar = useCallback((year, month) => {
     let mon = month; // months in JS are 0..11, not 1..12
     let d = new Date(year, mon);
 
@@ -58,7 +58,7 @@ const CalendarItems = () => {
     setDummyStart(Array.from(Array(start).keys()));
     setDummyEnd(Array.from(Array(end).keys()));
     setItems(Array.from(Array(mid).keys()));
-  }
+  }, []);
 
   function getDay(date) {
     // get day number from 0 (monday) to 6 (sunday)
@@ -69,7 +69,7 @@ const CalendarItems = () => {
 
   useEffect(() => {
     createCalendar(date.year, date.month);
-  }, [date.year, date.month]);
+  }, [createCalendar, date.year, date.month]);
 
   function changeMonth(month) {
     if (month === date.month) return;

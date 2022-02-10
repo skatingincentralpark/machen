@@ -7,6 +7,7 @@ import { Button } from "../styles/Button.styled";
 const Dropdown = forwardRef((props, ref) => (
   <StyledDropdown ref={ref}>{props.children}</StyledDropdown>
 ));
+Dropdown.displayName = "Dropdown";
 
 export default Dropdown;
 
