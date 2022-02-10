@@ -5,7 +5,7 @@ import {
   StyledCalendarItem,
   StyledCalendarItems,
   StyledYearSelector,
-} from "./Test.styled";
+} from "./Calendar.styled";
 import { StyledPopup } from "../notes/Notes.styled";
 
 import CalendarLeftBar from "./CalendarLeftBar";
@@ -142,7 +142,9 @@ const CalendarItems = () => {
         })}
 
         {dummyItemsEnd?.map((x, i) => (
-          <StyledCalendarItem key={i + "end"} dummy={true} />
+          <StyledCalendarItem key={i + "end"} dummy={true}>
+            <span>&nbsp;</span>
+          </StyledCalendarItem>
         ))}
       </StyledCalendarItems>
 

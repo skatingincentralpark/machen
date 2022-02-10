@@ -119,7 +119,6 @@ const TextEditor = ({ onSave, onClose, selectedDate }) => {
       dataStyle === "ITALIC" ||
       dataStyle === "UNDERLINE"
     ) {
-      console.log(dataStyle);
       setEditorState(RichUtils.toggleInlineStyle(editorState, dataStyle));
 
       return;

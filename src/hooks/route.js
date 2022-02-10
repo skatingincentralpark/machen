@@ -7,7 +7,7 @@ export function withPublic(Component) {
     const router = useRouter();
 
     if (user) {
-      router.push("/calendartest");
+      router.push("/calendar");
       return <></>; // Could be loading component here
     }
 

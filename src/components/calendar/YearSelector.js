@@ -3,7 +3,16 @@ import React from "react";
 import { StyledButton } from "../styles/Button.styled";
 
 const YearSelector = ({ changeYear }) => {
-  const years = [2022, 2021, 2020, 2019];
+  const d = new Date();
+  const currYear = d.getFullYear();
+
+  let years = [];
+
+  // Create array of years up to 2021
+  for (var i = currYear; i >= 2021; i--) {
+    years.push(i);
+  }
+
   return (
     <div>
       {years.map((year) => (

@@ -1,6 +1,6 @@
 import React from "react";
 
-import { StyledCalendarRightBar, AllNotesButton } from "./Test.styled";
+import { StyledCalendarRightBar, AllNotesButton } from "./Calendar.styled";
 
 const CalendarRightBar = ({ onClick }) => {
   return (

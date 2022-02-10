@@ -1,6 +1,6 @@
 import React from "react";
 
-import { StyledCalendarLeftBar } from "./Test.styled";
+import { StyledCalendarLeftBar } from "./Calendar.styled";
 import { LeftBarButton } from "../styles/Button.styled";
 
 const months = [
@@ -35,7 +35,7 @@ const CalendarLeftBar = ({ onClick, changeMonth, date }) => {
       ))}
 
       <LeftBarButton onClick={onClick} noBorderRadius>
-        <span>2022</span>
+        <span>{date.year}</span>
       </LeftBarButton>
     </StyledCalendarLeftBar>
   );

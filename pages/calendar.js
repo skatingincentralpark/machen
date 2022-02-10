@@ -2,11 +2,11 @@ import { useState } from "react";
 import Switch from "react-switch";
 import { withProtected } from "../src/hooks/route";
 
-import CalendarTest from "../src/components/calendartest/CalendarTest";
+import Calendar from "../src/components/calendar/Calendar";
 
 import styled from "styled-components";
 
-const Calendartest = () => {
+const CalendarPage = () => {
   const [checked, setChecked] = useState(false);
 
   const handleChange = (checked) => {
@@ -15,7 +15,7 @@ const Calendartest = () => {
 
   return (
     <>
-      <CalendarTest />
+      <Calendar />
       <SwitchContainer>
         <Switch onChange={handleChange} checked={checked} />
       </SwitchContainer>
@@ -23,7 +23,7 @@ const Calendartest = () => {
   );
 };
 
-export default withProtected(Calendartest);
+export default withProtected(CalendarPage);
 
 export const SwitchContainer = styled.label`
   position: fixed;

@@ -44,13 +44,13 @@ const Header = () => {
                 <b>record your thoughts</b> through an unobtrusive interface.
               </span>
               <div>
-                <NavButton
+                {/* <NavButton
                   highlight="white"
                   onClick={hideNavHandler}
                   color="white"
                 >
                   Delete Account
-                </NavButton>
+                </NavButton> */}
                 <NavButton
                   highlight="white"
                   onClick={() => {
