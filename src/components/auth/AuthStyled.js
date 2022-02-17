@@ -23,6 +23,19 @@ export const StyledAuthContainer = styled.div`
     border: none;
     border-top: 1px solid lightgray;
   }
+
+  & * {
+    animation: fadein 0.5s;
+  }
+
+  @keyframes fadein {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
 `;
 
 export const AuthButton = styled(StyledButton)`

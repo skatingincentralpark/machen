@@ -1,8 +1,8 @@
 import { useState } from "react";
+import { withPublic } from "../../hooks/route";
 
 import Register from "./Register";
 import Login from "./Login";
-
 import { StyledAuthContainer, AuthButton } from "./AuthStyled";
 
 const Auth = () => {
@@ -26,4 +26,4 @@ const Auth = () => {
   );
 };
 
-export default Auth;
+export default withPublic(Auth);

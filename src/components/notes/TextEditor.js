@@ -20,8 +20,14 @@ import {
 import { NoteFormButton } from "../styles/Button.styled";
 
 import Dropdown, { DropdownBtn } from "../ui/Dropdown";
+import machenLogoAlt from "../../../public/svg/machenLogoAlt.svg";
 
-const TextEditor = ({ onSave, onClose, selectedDate }) => {
+const TextEditor = ({
+  onSave = () => {},
+  onClose = () => {},
+  selectedDate = new Date(2022, 0, 1),
+  isLanding = false,
+}) => {
   const newDateString = `${selectedDate.toLocaleString("en-us", {
     weekday: "short",
   })} ${selectedDate.getDate()} ${selectedDate.toLocaleString("default", {
@@ -305,16 +311,19 @@ const TextEditor = ({ onSave, onClose, selectedDate }) => {
           keyBindingFn={keyBindingFunction}
           placeholder="Enter something here"
         />
+        <img src="/svg/machenLogoAlt.svg" alt="" />
       </EditorWrapper>
 
-      <NoteFormRight>
-        <NoteFormButton onClick={saveText}>
-          <img src="/svg/tick.svg" alt="" />
-        </NoteFormButton>
-        <NoteFormButton onClick={onClose}>
-          <img src="/svg/closeButton.svg" alt="" />
-        </NoteFormButton>
-      </NoteFormRight>
+      {!isLanding && (
+        <NoteFormRight>
+          <NoteFormButton onClick={saveText}>
+            <img src="/svg/tick.svg" alt="" />
+          </NoteFormButton>
+          <NoteFormButton onClick={onClose}>
+            <img src="/svg/closeButton.svg" alt="" />
+          </NoteFormButton>
+        </NoteFormRight>
+      )}
     </>
   );
 };

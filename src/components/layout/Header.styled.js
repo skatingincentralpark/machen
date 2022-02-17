@@ -22,12 +22,13 @@ export const StyledLogo = styled.img`
   z-index: 9;
   width: 7rem;
   min-width: 70px;
-  opacity: ${({ isLoggedOn }) => (!isLoggedOn ? "0.5" : "1")};
+  /* opacity: ${({ isLoggedOn }) => (!isLoggedOn ? "0.5" : "1")}; */
   transition: opacity 0.5s, filter 0.25s, transform 0.5s ease-out, top 0.05s,
     left 0.5s ease-out;
   transform: ${({ isLoggedOn }) => (!isLoggedOn ? "translateX(-50%)" : "")};
   filter: ${({ open }) => (open ? "brightness(2)" : "brightness(1)")};
-  animation: fadein 0.5s;
+  animation: fadein 2s;
+  cursor: pointer;
 
   @keyframes fadein {
     0% {

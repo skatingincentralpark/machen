@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useRouter } from "next/router";
 
 import {
   ShowNavButton,
@@ -12,7 +13,8 @@ import useAuth from "../../hooks/auth";
 
 const Header = () => {
   const [showNav, setShowNav] = useState(false);
-  const { user, logout } = useAuth();
+  const { user, logout, isLanding } = useAuth();
+  const router = useRouter();
 
   const showNavHandler = () => {
     setShowNav((prev) => !prev);
@@ -24,12 +26,17 @@ const Header = () => {
 
   return (
     <>
-      <StyledLogo
-        open={showNav}
-        src="/svg/logoSmall.svg"
-        alt=""
-        isLoggedOn={user}
-      />
+      {router.pathname !== "/" && (
+        <StyledLogo
+          open={showNav}
+          src="/svg/logoSmall.svg"
+          alt=""
+          isLoggedOn={user}
+          onClick={() => {
+            router.push("/");
+          }}
+        />
+      )}
 
       {user && (
         <>

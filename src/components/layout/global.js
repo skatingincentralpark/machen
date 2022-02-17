@@ -6,14 +6,23 @@ const GlobalStyles = createGlobalStyle`
   }
   html {
     font-size: 13px;
-    overflow-y: scroll;
+    overflow-x: hidden;
     scroll-behavior: smooth;
+
+    @media (max-width: 800px) {
+      font-size: 11px;
+    }
+    @media (max-width: 375px) {
+      font-size: 10px;
+    }
+    @media (max-width: 375px) {
+      font-size: 9px;
+    }
   }
   body {
     background: white;
     font-family: ${({ theme }) => theme.font.main};
     margin: 0;
-    padding: 1em;
     color: ${({ theme }) => theme.colors.body};
   }
   ::selection {
@@ -61,7 +70,6 @@ const GlobalStyles = createGlobalStyle`
   *::-webkit-scrollbar-track {
     background: lightgray;
   }
-  
 `;
 
 export default GlobalStyles;

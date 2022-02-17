@@ -13,9 +13,11 @@ const theme = {
   colors: {
     highlight: "#bbff00",
     body: "#999999",
+    bodyLight: "rgb(247, 247, 247)",
   },
   viewport: {
     mobile: "800px",
+    tablet: "900px",
     desktop: "1196px",
     largedesktop: "1540px",
   },

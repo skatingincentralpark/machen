@@ -118,9 +118,11 @@ export const EditorWrapper = styled.div`
   width: 30rem;
   padding: 1rem;
   background: white;
+  position: relative;
 
   & > div:first-child {
     height: 3rem;
+    border-bottom: 1px dashed lightgray;
   }
   & > div > h2 {
     font-weight: 400;
@@ -128,8 +130,15 @@ export const EditorWrapper = styled.div`
 
   & > div:nth-child(2) {
     /* padding: 0 1rem; */
+    margin-top: 1rem;
     height: calc(100% - 3rem);
     overflow-y: auto;
+  }
+
+  & > img {
+    bottom: 1rem;
+    position: absolute;
+    width: 25%;
   }
 `;
 
