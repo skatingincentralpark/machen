@@ -6,7 +6,7 @@ import { StyledPopup } from "../notes/Notes.styled";
 export const CalendarGrid = styled.div`
   position: relative;
   display: grid;
-  margin: 3rem auto 0 auto;
+  margin: 3.5rem auto 0 auto;
   border-radius: 15px 15px 15px 15px;
   overflow: hidden;
   box-shadow: 17px 15px 20px #00000036;
@@ -34,6 +34,13 @@ export const CalendarGrid = styled.div`
       ". topbar topbar"
       "leftbar calendar calendar"
       "leftbar rightbar rightbar";
+  }
+
+  @media (max-width: 500px) {
+    border-radius: 0 !important;
+    & * {
+      border-radius: 0 !important;
+    }
   }
 `;
 
@@ -174,22 +181,9 @@ export const StyledCalendarItem = styled.div`
 
   background: ${({ dummy }) => dummy && "lightgray"};
 
-  /* background: ${({ dummy }) =>
-    dummy && "linear-gradient(270deg, #cc86e1, #4419ca, #a0e80e)"};
-  animation: ${({ dummy }) => dummy && "gradientanimation 10s ease infinite"};
-  background-size: 700% 700%;
-
-  @keyframes gradientanimation {
-    0% {
-      background-position: 0% 50%;
-    }
-    50% {
-      background-position: 100% 50%;
-    }
-    100% {
-      background-position: 0% 50%;
-    }
-  } */
+  @media (max-width: 500px) {
+    width: 2rem;
+  }
 
   & > span {
     padding: ${({ theme }) => theme.spacing.sm};

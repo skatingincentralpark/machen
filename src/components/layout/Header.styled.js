@@ -44,6 +44,13 @@ export const StyledLogo = styled.img`
     opacity: 0.5;
     transition: opacity 0.5s;
   }
+
+  @media (max-width: 500px) {
+    z-index: 0;
+    visibility: hidden;
+    opacity: 0.5;
+    transition: opacity 0.5s, visibility 0.5s;
+  }
 `;
 
 export const MobileNav = styled.nav`
