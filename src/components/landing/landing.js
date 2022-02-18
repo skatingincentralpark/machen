@@ -23,7 +23,7 @@ const Landing = () => {
           Enter
         </StyledButton>
       </LandingHeader>
-      <LandingSection pt="10rem" px="1rem">
+      <LandingSection pt="10rem" px="1rem" fadeIn>
         <Flex>
           <FlexLeft>
             <StyledLogo src="/svg/machenLogoAltBlack.svg" alt="" />
@@ -118,19 +118,19 @@ const Landing = () => {
         {/* </Timeline> */}
       </LandingSection>
 
-      <LandingSection ogFont flexColumn pt="5rem" bg="#f7f7f7">
+      <LandingSection ogFont flexColumn pt="5rem" height="100vh">
         <ScrollTrigger start="top center" end="center" scrub={0.5}>
-          <GradientOverlay2>
+          {/* <GradientOverlay2>
             <Tween from={{ opacity: "0" }} to={{ opacity: "1" }}>
-              {/* <div />
               <div />
-              <div /> */}
+              <div />
+              <div />
               <div />
             </Tween>
-          </GradientOverlay2>
+          </GradientOverlay2> */}
           <Tween
-            from={{ opacity: "0", x: "10%", top: "10%" }}
-            to={{ opacity: "1", x: "0%", top: "0" }}
+            from={{ opacity: "0", transform: "scale(2)" }}
+            to={{ opacity: "1", transform: "scale(1)" }}
           >
             <TryText>Give it a try</TryText>
             <LandingEditorWrapper
@@ -206,8 +206,9 @@ const StyledButton = styled(Button)`
 `;
 
 const LandingSection = styled.div`
-  height: ${({ height }) => (height ? height : "100vh")};
+  height: ${({ height }) => (height ? height : "80vh")};
   position: relative;
+  contain: paint;
   width: 100vw;
   padding-left: ${({ px }) => px};
   padding-right: ${({ px }) => px};
@@ -235,6 +236,17 @@ const LandingSection = styled.div`
     font-size: ${({ ogFont }) => !ogFont && "2rem"};
     margin-top: ${({ ogFont }) => !ogFont && "1.6rem"};
     line-height: ${({ ogFont }) => !ogFont && "1.3em"};
+  }
+
+  animation: ${({ fadeIn }) => fadeIn && "fadein 1s"};
+
+  @keyframes fadein {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
   }
 `;
 
@@ -300,6 +312,7 @@ const ScalingText = styled.div`
   position: absolute;
   text-align: center;
   width: 40rem;
+  padding: 3rem;
   opacity: 1;
   z-index: 4;
 
@@ -351,9 +364,9 @@ const ScalingText = styled.div`
 
 const TryText = styled.h2`
   font-family: baskerville;
-  text-decoration: underline 0.15rem;
-  text-underline-offset: 0.25rem;
-  color: black;
+  text-decoration: underline 1px;
+  text-underline-offset: 0.65rem;
+  color: ${({ theme }) => theme.colors.body};
   font-weight: 500;
   font-size: 3rem;
   line-height: 1.3em;
@@ -377,11 +390,15 @@ const GradientOverlay2 = styled.div`
     height: 100%;
   }
 
-  & > div:nth-child(1) {
+  /* & > div:nth-child(1) {
     background: rgb(221, 255, 0);
-    background: linear-gradient(0deg, pink 0%, rgba(255, 255, 255, 0) 8%);
+    background: linear-gradient(
+      90deg,
+      chartreuse 0%,
+      rgba(255, 255, 255, 0) 8%
+    );
   }
-  /* & > div:nth-child(2) {
+  & > div:nth-child(2) {
     background: rgb(221, 255, 0);
     background: linear-gradient(
       270deg,
@@ -409,5 +426,5 @@ export const LandingEditorWrapper = styled.div`
   display: flex;
   height: 70%;
   min-height: 35rem;
-  border-radius: 15px;
+  border-radius: 25px;
 `;

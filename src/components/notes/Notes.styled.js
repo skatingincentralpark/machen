@@ -82,16 +82,6 @@ export const StyledAllNotes = styled(StyledPopup)`
 export const StyledNote = styled.div`
   max-width: 37.5rem;
   margin: 3rem auto 0 auto;
-  /* animation: fadein 0.5s;
-
-  @keyframes fadein {
-    0% {
-      opacity: 0;
-    }
-    100% {
-      opacity: 1;
-    }
-  } */
 
   & > div:first-child {
     display: flex;
@@ -116,13 +106,16 @@ export const StyledNoteForm = styled.div`
 
 export const EditorWrapper = styled.div`
   width: 30rem;
-  padding: 1rem;
+  padding: 1.5rem 2rem;
   background: white;
+  border-top: 1px solid #cccccc;
+  border-right: 1px solid #cccccc;
+  border-bottom: 1px solid #cccccc;
   position: relative;
 
   & > div:first-child {
     height: 3rem;
-    border-bottom: 1px dashed lightgray;
+    border-bottom: 1px solid lightgray;
   }
   & > div > h2 {
     font-weight: 400;
@@ -136,9 +129,12 @@ export const EditorWrapper = styled.div`
   }
 
   & > img {
-    bottom: 1rem;
+    bottom: 1.5rem;
     position: absolute;
     width: 25%;
+    backdrop-filter: blur(2px);
+    z-index: 3;
+    height: fit-content;
   }
 `;
 
@@ -149,7 +145,7 @@ export const EditorButtons = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  border-radius: 15px 0 0 15px;
+  border-radius: 25px 0 0 25px;
   height: 100%;
   background: ${({ theme }) => theme.colors.body};
 
