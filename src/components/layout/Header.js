@@ -32,6 +32,7 @@ const Header = () => {
           src="/svg/logoSmall.svg"
           alt=""
           isLoggedOn={user}
+          showNav={showNav}
           onClick={() => {
             router.push("/");
           }}

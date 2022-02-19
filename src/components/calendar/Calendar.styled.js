@@ -181,7 +181,7 @@ export const StyledCalendarItem = styled.div`
 
   background: ${({ dummy }) => dummy && "lightgray"};
 
-  @media (max-width: 500px) {
+  @media (max-width: 560px) {
     width: 2rem;
   }
 

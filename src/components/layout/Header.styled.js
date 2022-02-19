@@ -46,10 +46,10 @@ export const StyledLogo = styled.img`
   }
 
   @media (max-width: 500px) {
-    z-index: 0;
-    visibility: hidden;
-    opacity: 0.5;
-    transition: opacity 0.5s, visibility 0.5s;
+    z-index: ${({ showNav }) => !showNav && 0};
+    visibility: ${({ showNav }) => !showNav && `hidden`};
+    opacity: ${({ showNav }) => !showNav && 0.5};
+    /* transition: opacity 0.5s, visibility 0.5s; */
   }
 `;
 

@@ -139,7 +139,7 @@ const Landing = () => {
                 boxShadow: "rgb(0 0 0 / 35%) 1px 7px 40px",
               }}
             >
-              <TextEditor isLanding={true} />
+              <TextEditor isLanding={true} initialFocus={false} />
             </LandingEditorWrapper>
           </Tween>
         </ScrollTrigger>

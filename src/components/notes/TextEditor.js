@@ -27,6 +27,7 @@ const TextEditor = ({
   onClose = () => {},
   selectedDate = new Date(2022, 0, 1),
   isLanding = false,
+  initialFocus = true,
 }) => {
   const newDateString = `${selectedDate.toLocaleString("en-us", {
     weekday: "short",
@@ -60,6 +61,7 @@ const TextEditor = ({
   }
 
   useEffect(() => {
+    if (!initialFocus) return;
     focusEditor();
   }, []);
 
