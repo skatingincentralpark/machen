@@ -1,8 +1,8 @@
-import React from "react";
-
 import {
   doc,
   arrayUnion,
+  arrayRemove,
+  writeBatch,
   updateDoc,
   getDocs,
   addDoc,
@@ -12,24 +12,31 @@ import {
   where,
 } from "firebase/firestore";
 import { db } from "../../utils/firebase";
+import useAuth from "../../hooks/auth";
 
 import TextEditor from "./TextEditor";
 import { StyledNoteForm } from "./Notes.styled";
 
 const NoteForm = ({ onClose, date, selectedDate }) => {
+  const { user } = useAuth();
+
   // Save Note
   // @@   TO-DO: have to return monthnotes to ensure fresh state
   const onSave = async (rawContentState) => {
-    const date = new Date();
-    const firstDayOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
+    const firstDayOfMonth = new Date(
+      selectedDate.getFullYear(),
+      selectedDate.getMonth(),
+      1
+    );
 
     const today = new Date();
     today.setUTCHours(0, 0, 0, 0);
 
     try {
-      // 1) Create new note
+      // 1) Create new note (single)
       const newNote = {
         rawContent: rawContentState,
+        date: Timestamp.fromDate(selectedDate).toDate(),
         created: Timestamp.fromDate(today).toDate(),
       };
 
@@ -40,9 +47,27 @@ const NoteForm = ({ onClose, date, selectedDate }) => {
       );
       const querySnapshot = await getDocs(q);
       const ids = querySnapshot.docs.map((doc) => doc.id);
+      const docs = querySnapshot.docs.map((doc) => doc.data());
 
-      // 2.1) If exists => push new note to array
-      if (!!ids.length) {
+      // 2.1) If note for that date exists => update that note (remove and add)
+      const existingNote = docs[0]?.notes?.find(
+        (note) => +note.date === +Timestamp.fromDate(selectedDate)
+      );
+
+      if (existingNote) {
+        const monthNotesRef = doc(db, "monthNotes", ids[0]);
+        const batch = writeBatch(db);
+
+        batch.update(monthNotesRef, { notes: arrayRemove(existingNote) });
+        batch.update(monthNotesRef, { notes: arrayUnion(newNote) });
+
+        await batch.commit();
+
+        return;
+      }
+
+      // 2.2) If monthNotes exists => push new note to array
+      if (!!ids.length && !existingNote) {
         const monthNotesRef = doc(db, "monthNotes", ids[0]);
 
         await updateDoc(monthNotesRef, {
@@ -52,7 +77,7 @@ const NoteForm = ({ onClose, date, selectedDate }) => {
         return;
       }
 
-      // 3) Create new month note
+      // 3) Create new month note (group of notes)
       const newMonthNotes = {
         user: user.uid,
         notes: [newNote],

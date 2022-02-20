@@ -58,7 +58,6 @@ const Layout = ({ children }) => {
         )
           check = true;
       })(navigator.userAgent || navigator.vendor || window.opera);
-      console.log(check);
       return check;
     };
 

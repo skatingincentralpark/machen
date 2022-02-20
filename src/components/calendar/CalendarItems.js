@@ -58,6 +58,7 @@ const CalendarItems = () => {
     setDummyStart(Array.from(Array(start).keys()));
     setDummyEnd(Array.from(Array(end).keys()));
     setItems(Array.from(Array(mid).keys()));
+    console.log(Array.from(Array(mid).keys()));
   }, []);
 
   function getDay(date) {

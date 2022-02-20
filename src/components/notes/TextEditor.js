@@ -202,7 +202,7 @@ const TextEditor = ({
 
   const saveText = () => {
     // Preventing save while site is still being developed
-    return;
+    // return;
     const contentState = editorState.getCurrentContent();
     const rawContentState = convertToRaw(contentState);
 
@@ -276,22 +276,6 @@ const TextEditor = ({
                   <span>{c.label}</span>
                 </EditorBtn>
               ))}
-
-              {/* <EditorBtn
-                data-style="COLOR"
-                light
-                horizontal
-                onMouseDown={toggleStyle}
-                active={hasStyle("COLOR")}
-              >
-                <span>Red</span>
-              </EditorBtn>
-              <EditorBtn data-style="COLOR" light horizontal>
-                <span>Blue</span>
-              </EditorBtn>
-              <EditorBtn data-style="COLOR" light horizontal>
-                <span>Green</span>
-              </EditorBtn> */}
             </Dropdown>
           </CSSTransition>
         </div>

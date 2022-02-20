@@ -9,7 +9,7 @@ const Alert = ({ onClick }) => {
           <h2>Machen is intended for use on desktop</h2>
           <p>
             Please note that the experience on mobile and smaller viewports is
-            still in development and is very janky at this time.
+            still in development and is incomplete at this time.
           </p>
           <Button onClick={onClick}>Okay</Button>
         </span>

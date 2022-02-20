@@ -59,7 +59,8 @@ export function AuthProvider(props) {
 
       // Add user to firestore
       await setDoc(doc(db, "users", user.uid), {
-        name: name,
+        name,
+        email,
       });
 
       setUser(user ?? null);
