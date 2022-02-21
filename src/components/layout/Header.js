@@ -26,18 +26,19 @@ const Header = () => {
 
   return (
     <>
-      {router.pathname !== "/" && (
-        <StyledLogo
-          open={showNav}
-          src="/svg/logoSmall.svg"
-          alt=""
-          isLoggedOn={user}
-          showNav={showNav}
-          onClick={() => {
-            router.push("/");
-          }}
-        />
-      )}
+      {router.pathname !== "/" ||
+        ("/landing" && (
+          <StyledLogo
+            open={showNav}
+            src="/svg/logoSmall.svg"
+            alt=""
+            isLoggedOn={user}
+            showNav={showNav}
+            onClick={() => {
+              router.push("/");
+            }}
+          />
+        ))}
 
       {user && (
         <>

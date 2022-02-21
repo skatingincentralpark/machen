@@ -13,7 +13,7 @@ const Landing = () => {
   const router = useRouter();
 
   return (
-    <StyledLanding>
+    <>
       <LandingHeader>
         <StyledButton
           onClick={() => {
@@ -23,134 +23,132 @@ const Landing = () => {
           Enter
         </StyledButton>
       </LandingHeader>
-      <LandingSection pt="10rem" px="1rem" fadeIn>
-        <Flex>
-          <FlexLeft>
-            <StyledLogo src="/svg/machenLogoAltBlack.svg" alt="" />
-            <h2>
-              Record daily thoughts and track your habits through a simple UI.
-            </h2>
-            <h3>
-              Found an interesting quote? Learnt something new? Write a
-              reflection to look back to in the future.
-            </h3>
-            <div>
-              <StyledButton
-                onClick={() => {
-                  router.push("/auth");
+
+      <StyledLanding>
+        <LandingSection pt="10rem" px="1rem" fadeIn overflowHidden>
+          <Flex>
+            <FlexLeft>
+              <StyledLogo src="/svg/machenLogoAltBlack.svg" alt="" />
+              <h2>
+                Record daily thoughts and track your habits through a simple UI.
+              </h2>
+              <h3>
+                Found an interesting quote? Learnt something new? Write a
+                reflection to look back to in the future.
+              </h3>
+              <div>
+                <StyledButton
+                  onClick={() => {
+                    router.push("/auth");
+                  }}
+                >
+                  Enter
+                </StyledButton>
+              </div>
+            </FlexLeft>
+            <ImageWrap1>
+              <Image
+                src={screenshot}
+                alt="Screenshot of Machen UI"
+                placeholder="blur"
+              />
+            </ImageWrap1>
+          </Flex>
+        </LandingSection>
+
+        <LandingSection pt="5rem" center height="250vh">
+          <ScrollTrigger start="top center" end="bottom" scrub={0.5}>
+            <StickyContainer>
+              <Tween
+                from={{
+                  top: "10%",
+                  opacity: "0",
+                  transform: "scale(1.2)",
+                }}
+                to={{ top: "25%", opacity: "1", transform: "scale(1)" }}
+              >
+                <ScalingText>
+                  <h2>
+                    Rich Text Formatting
+                    <br />
+                    <b>Bold</b>, <i>Italic</i>,{" "}
+                    <span style={{ color: "red" }}>Colors</span> &amp; More
+                  </h2>
+                  <h3>
+                    <span>
+                      Draft.js implementation to deliver customisable text.
+                      Write how you like with lists and highlighting to improve
+                      readability.
+                    </span>
+                  </h3>
+                </ScalingText>
+              </Tween>
+
+              <Tween
+                from={{
+                  background: `linear-gradient(18deg, rgba(255, 255, 255, 0) 85%, rgba(255, 255, 255, 1) 105%`,
+                }}
+                to={{
+                  background: `linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 0%`,
                 }}
               >
-                Enter
-              </StyledButton>
-            </div>
-          </FlexLeft>
-          <ImageWrap1>
-            <Image
-              src={screenshot}
-              alt="Screenshot of Machen UI"
-              // width={500} automatically provided
-              // height={500} automatically provided
-              // blurDataURL="data:..." automatically provided
-              placeholder="blur" // Optional blur-up while loading
-            />
-          </ImageWrap1>
-        </Flex>
-      </LandingSection>
+                <GradientOverlay />
+              </Tween>
 
-      <LandingSection pt="5rem" center height="250vh">
-        {/* <Timeline totalProgress={1} paused> */}
-        <ScrollTrigger start="top center" end="bottom" scrub={0.5}>
-          <StickyContainer>
+              <Tween
+                from={{ x: "0%", top: "5rem" }}
+                to={{ x: "0", top: "0rem" }}
+              >
+                <FullVwContainer overflowXHidden>
+                  <ImageWrap2>
+                    <Image
+                      src={screenshot}
+                      alt="Screenshot of Machen UI"
+                      priority
+                      placeholder="blur"
+                    />
+                  </ImageWrap2>
+                </FullVwContainer>
+              </Tween>
+            </StickyContainer>
+          </ScrollTrigger>
+        </LandingSection>
+
+        <LandingSection
+          ogFont
+          flexColumn
+          pt="5rem"
+          height="100vh"
+          overflowHidden
+        >
+          <ScrollTrigger start="top center" end="center" scrub={0.5}>
             <Tween
-              from={{
-                x: "80%",
-                top: "10%",
-                opacity: "0",
-                transform: "scale(1.5)",
-              }}
-              to={{ x: "0", top: "30%", opacity: "1", transform: "scale(1)" }}
+              from={{ opacity: "0", x: "10%" }}
+              to={{ opacity: "1", x: "0%" }}
             >
-              <ScalingText>
-                <h2>
-                  Rich Text Formatting
-                  <br />
-                  <b>Bold</b>, <i>Italic</i>,{" "}
-                  <span style={{ color: "red" }}>Colors</span> & More
-                </h2>
-                <h3>
-                  Draft.js implementation to deliver customisable text. Write
-                  how you like with lists and highlighting to improve
-                  readability.
-                </h3>
-              </ScalingText>
+              <TryText>Give it a try</TryText>
+              <LandingEditorWrapper
+                style={{
+                  height: "30rem",
+                  boxShadow: "rgb(0 0 0 / 35%) 1px 7px 40px",
+                }}
+              >
+                <TextEditor isLanding={true} initialFocus={false} />
+              </LandingEditorWrapper>
             </Tween>
-
-            {/* <Timeline totalProgress={1} paused> */}
-            <Tween
-              from={{
-                background: `linear-gradient(18deg, rgba(255, 255, 255, 0) 85%, rgba(255, 255, 255, 1) 105%`,
-              }}
-              to={{
-                background: `linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 0%`,
-              }}
-            >
-              <GradientOverlay />
-            </Tween>
-            {/* </Timeline> */}
-
-            {/* <Timeline totalProgress={1} paused> */}
-            <Tween from={{ x: "0%", top: "10%" }} to={{ x: "0", top: "5rem" }}>
-              <ImageWrap2>
-                <Image
-                  src={screenshot}
-                  alt="Screenshot of Machen UI"
-                  priority
-                  // width={500} automatically provided
-                  // height={500} automatically provided
-                  // blurDataURL="data:..." automatically provided
-                  placeholder="blur" // Optional blur-up while loading
-                />
-              </ImageWrap2>
-            </Tween>
-          </StickyContainer>
-        </ScrollTrigger>
-        {/* </Timeline> */}
-        {/* </Timeline> */}
-      </LandingSection>
-
-      <LandingSection ogFont flexColumn pt="5rem" height="100vh">
-        <ScrollTrigger start="top center" end="center" scrub={0.5}>
-          {/* <GradientOverlay2>
-            <Tween from={{ opacity: "0" }} to={{ opacity: "1" }}>
-              <div />
-              <div />
-              <div />
-              <div />
-            </Tween>
-          </GradientOverlay2> */}
-          <Tween
-            from={{ opacity: "0", transform: "scale(2)" }}
-            to={{ opacity: "1", transform: "scale(1)" }}
-          >
-            <TryText>Give it a try</TryText>
-            <LandingEditorWrapper
-              style={{
-                height: "30rem",
-                boxShadow: "rgb(0 0 0 / 35%) 1px 7px 40px",
-              }}
-            >
-              <TextEditor isLanding={true} initialFocus={false} />
-            </LandingEditorWrapper>
-          </Tween>
-        </ScrollTrigger>
-      </LandingSection>
-    </StyledLanding>
+          </ScrollTrigger>
+        </LandingSection>
+      </StyledLanding>
+    </>
   );
 };
 
 export default Landing;
 
-export const StyledLanding = styled.div``;
+export const StyledLanding = styled.div`
+  max-width: 100vw;
+  height: 100%;
+`;
 
 export const LandingHeader = styled.div`
   position: fixed;
@@ -208,13 +206,10 @@ const StyledButton = styled(Button)`
 const LandingSection = styled.div`
   height: ${({ height }) => (height ? height : "80vh")};
   position: relative;
-  contain: paint;
-  width: 100vw;
+  width: 100%;
   padding-left: ${({ px }) => px};
   padding-right: ${({ px }) => px};
   padding-top: ${({ pt }) => pt};
-  /* border-top: 1px dashed red;
-  border-bottom: 1px dashed red; */
   display: flex;
   flex-direction: ${({ flexColumn }) => flexColumn && `column`};
   align-items: flex-start;
@@ -250,17 +245,6 @@ const LandingSection = styled.div`
   }
 `;
 
-const StickyContainer = styled.div`
-  height: ${({ height }) => (height ? height : "100vh")};
-  width: 100vw;
-  top: 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  position: sticky;
-`;
-
 const ImageWrap = styled.span`
   width: 70rem;
   transform: translateX(-2rem);
@@ -281,6 +265,7 @@ const ImageWrap1 = styled(ImageWrap)`
   }
   @media (max-width: 1000px) {
     transform: translateX(55%);
+    margin-top: -2rem;
   }
   @media (max-width: 600px) {
     transform: translateX(75%);
@@ -294,9 +279,31 @@ const ImageWrap2 = styled(ImageWrap)`
   top: 5rem;
   margin: 0;
   left: 0;
-  width: 100rem;
   padding: 0 5rem 0 5rem;
   transition: transform 0s, width 0s;
+  width: 100rem;
+
+  & img {
+    object-fit: contain;
+  }
+`;
+
+const StickyContainer = styled.div`
+  height: ${({ height }) => (height ? height : "100vh")};
+  width: 100vw;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: sticky;
+`;
+
+const FullVwContainer = styled.div`
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow-x: ${({ overflowXHidden }) => overflowXHidden && "hidden"};
 `;
 
 const GradientOverlay = styled.div`
@@ -311,8 +318,9 @@ const GradientOverlay = styled.div`
 const ScalingText = styled.div`
   position: absolute;
   text-align: center;
-  width: 40rem;
-  padding: 3rem;
+  width: 80%;
+  max-width: 32.5rem;
+  padding: 1rem;
   opacity: 1;
   z-index: 4;
 
@@ -372,52 +380,6 @@ const TryText = styled.h2`
   line-height: 1.3em;
   text-align: center;
   width: 100%;
-`;
-
-const GradientOverlay2 = styled.div`
-  top: 0;
-  right: 0;
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  z-index: 0;
-
-  & * {
-    top: 0;
-    right: 0;
-    position: absolute;
-    width: 100%;
-    height: 100%;
-  }
-
-  /* & > div:nth-child(1) {
-    background: rgb(221, 255, 0);
-    background: linear-gradient(
-      90deg,
-      chartreuse 0%,
-      rgba(255, 255, 255, 0) 8%
-    );
-  }
-  & > div:nth-child(2) {
-    background: rgb(221, 255, 0);
-    background: linear-gradient(
-      270deg,
-      chartreuse 0%,
-      rgba(255, 255, 255, 0) 8%
-    );
-  }
-  & > div:nth-child(3) {
-    background: rgb(221, 255, 0);
-    background: linear-gradient(
-      180deg,
-      chartreuse 0%,
-      rgba(255, 255, 255, 0) 8%
-    );
-  }
-  & > div:nth-child(4) {
-    background: rgb(221, 255, 0);
-    background: linear-gradient(0deg, chartreuse 0%, rgba(255, 255, 255, 0) 8%);
-  } */
 `;
 
 export const LandingEditorWrapper = styled.div`

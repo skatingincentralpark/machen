@@ -6,8 +6,8 @@ const GlobalStyles = createGlobalStyle`
   }
   html {
     font-size: 13px;
-    overflow-x: hidden;
     scroll-behavior: smooth;
+    height: 100%;
 
     @media (max-width: 800px) {
       font-size: 11px;
