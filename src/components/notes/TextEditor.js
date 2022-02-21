@@ -202,7 +202,7 @@ const TextEditor = ({
 
   const saveText = () => {
     // Preventing save while site is still being developed
-    // return;
+    return;
     const contentState = editorState.getCurrentContent();
     const rawContentState = convertToRaw(contentState);
 
