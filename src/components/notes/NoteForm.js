@@ -17,7 +17,7 @@ import useAuth from "../../hooks/auth";
 import TextEditor from "./TextEditor";
 import { StyledNoteForm } from "./Notes.styled";
 
-const NoteForm = ({ onClose, date, selectedDate }) => {
+const NoteForm = ({ onClose, date, selectedDate, currNote }) => {
   const { user } = useAuth();
 
   // Save Note
@@ -95,6 +95,7 @@ const NoteForm = ({ onClose, date, selectedDate }) => {
     <>
       <StyledNoteForm>
         <TextEditor
+          currNote={currNote}
           onClose={onClose}
           onSave={onSave}
           date={date}

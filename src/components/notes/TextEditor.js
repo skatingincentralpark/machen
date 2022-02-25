@@ -6,6 +6,7 @@ import {
   getDefaultKeyBinding,
   KeyBindingUtil,
   convertToRaw,
+  convertFromRaw,
   Modifier,
 } from "draft-js";
 import "draft-js/dist/Draft.css";
@@ -20,7 +21,6 @@ import {
 import { NoteFormButton } from "../styles/Button.styled";
 
 import Dropdown, { DropdownBtn } from "../ui/Dropdown";
-import machenLogoAlt from "../../../public/svg/machenLogoAlt.svg";
 
 const TextEditor = ({
   onSave = () => {},
@@ -28,7 +28,14 @@ const TextEditor = ({
   selectedDate = new Date(2022, 0, 1),
   isLanding = false,
   initialFocus = true,
+  currNote,
 }) => {
+  const [editorState, setEditorState] = useState(() => {
+    if (!currNote) return EditorState.createEmpty();
+    const converted = convertFromRaw(currNote?.rawContent);
+    return EditorState.createWithContent(converted);
+  });
+
   const newDateString = `${selectedDate.toLocaleString("en-us", {
     weekday: "short",
   })} ${selectedDate.getDate()} ${selectedDate.toLocaleString("default", {
@@ -38,10 +45,6 @@ const TextEditor = ({
   // Color Dropdown
   const [showColors, setShowColors] = useState(false);
   const nodeRef1 = useRef(null);
-
-  const [editorState, setEditorState] = useState(() =>
-    EditorState.createEmpty()
-  );
 
   const COLORS = [
     { label: "Red", style: "red" },
@@ -202,7 +205,6 @@ const TextEditor = ({
 
   const saveText = () => {
     // Preventing save while site is still being developed
-    return;
     const contentState = editorState.getCurrentContent();
     const rawContentState = convertToRaw(contentState);
 

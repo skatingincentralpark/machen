@@ -1,5 +1,7 @@
-import { useState, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { CSSTransition } from "react-transition-group";
+import { collection, query, where, getDocs } from "firebase/firestore";
+import { db } from "../../utils/firebase";
 
 import { CalendarGrid, StyledCalendarTopBar } from "./Calendar.styled";
 import { StyledAllNotes } from "../notes/Notes.styled";
@@ -18,14 +20,46 @@ const Calendar = () => {
 
   // Calendar State
   const [habits, setHabits] = useState([]);
-  const [notes, setNotes] = useState([]);
-  const [currNote, setCurrNote] = useState({}); // current note being edited
+  const [allMonthNotes, setAllMonthNotes] = useState([]);
 
   // UseAuth
   const { user } = useAuth();
 
   // To prevent findDOMNode depreciation warnings from react-transition-group
   const nodeRef1 = useRef(null);
+
+  // Firestore (getting all monthNotes)
+  useEffect(() => {
+    (async () => {
+      try {
+        const monthNotesRef = query(
+          collection(db, "monthNotes"),
+          where("user", "==", user.uid)
+        );
+
+        const querySnapshot = await getDocs(monthNotesRef);
+
+        let arr = [];
+
+        querySnapshot.forEach((doc) => {
+          // Create array of all monthNotes and converting Timestamp to Date obj
+          let monthNote = doc.data();
+
+          monthNote.created = monthNote.created.toDate();
+
+          monthNote.notes.forEach((note, i) => {
+            monthNote.notes[i].created = note.created.toDate();
+            monthNote.notes[i].date = note.date.toDate();
+          });
+          arr.push(monthNote);
+        });
+
+        setAllMonthNotes(arr);
+      } catch (error) {
+        console.log(error);
+      }
+    })();
+  }, []);
 
   return (
     <CalendarGrid>
@@ -49,7 +83,7 @@ const Calendar = () => {
 
       <CalendarRightBar onClick={() => setShowAllNotes(true)} />
 
-      <CalendarItems />
+      <CalendarItems allMonthNotes={allMonthNotes} />
     </CalendarGrid>
   );
 };

@@ -175,8 +175,9 @@ export const StyledCalendarItem = styled.div`
   min-height: 7rem;
   box-sizing: content-box;
   outline: 1px solid #bbbbbb;
-  background: ${({ hasNotes, theme }) =>
-    hasNotes ? theme.colors.highlight : "#f7f7f7"};
+  background: ${({ hasNote, theme }) =>
+    hasNote ? theme.colors.highlight : "#f7f7f7"};
+    transition: ${({ hasNote }) => hasNote && "all 0s"}
   transition: background 0.5s, color 0.5s;
 
   background: ${({ dummy }) => dummy && "lightgray"};

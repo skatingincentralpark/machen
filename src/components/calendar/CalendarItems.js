@@ -12,54 +12,79 @@ import CalendarLeftBar from "./CalendarLeftBar";
 import NoteForm from "../notes/NoteForm";
 import YearSelector from "./YearSelector";
 
-const CalendarItems = () => {
-  // UI states
+const CalendarItems = ({ allMonthNotes }) => {
+  // @@     UI states
   const [showNoteForm, setShowNoteForm] = useState(false);
   const [showYearSelector, setShowYearSelector] = useState(false);
 
-  // Date states
+  // @@     Date states
   const [date, setDate] = useState({ month: 1, year: 2022 });
   const [selectedDate, setSelectedDate] = useState(null); // for note form
   const [dummyItemsStart, setDummyStart] = useState([]);
   const [dummyItemsEnd, setDummyEnd] = useState([]);
   const [items, setItems] = useState([]);
 
-  // Node refs
+  // @@     Date states
+  const [currNote, setCurrNote] = useState(undefined); // current note being edited
+
+  // @@     Node refs
   const nodeRef1 = useRef(null);
   const nodeRef2 = useRef(null);
 
-  const createCalendar = useCallback((year, month) => {
-    let mon = month; // months in JS are 0..11, not 1..12
-    let d = new Date(year, mon);
+  // @@     Create Calendar
+  // @@     Creates 3 arrays, dummy start, actual items (with notes/habits if exists), dummy end
+  const createCalendar = useCallback(
+    (year, month) => {
+      let mon = month;
+      let d = new Date(year, mon);
 
-    let start = 0;
-    let mid = 0;
-    let end = 0;
+      let start = 0;
+      let mid = 0;
+      let end = 0;
 
-    for (let i = 0; i < getDay(d); i++) {
-      start++;
-    }
-
-    while (d.getMonth() == mon) {
-      mid++;
-      d.setDate(d.getDate() + 1);
-    }
-
-    if (getDay(d) != 0) {
-      for (let i = getDay(d); i < 7; i++) {
-        end++;
+      for (let i = 0; i < getDay(d); i++) {
+        start++;
       }
-    }
 
-    if (start + mid + end !== 42) {
-      end += 7;
-    }
+      while (d.getMonth() == mon) {
+        mid++;
+        d.setDate(d.getDate() + 1);
+      }
 
-    setDummyStart(Array.from(Array(start).keys()));
-    setDummyEnd(Array.from(Array(end).keys()));
-    setItems(Array.from(Array(mid).keys()));
-    console.log(Array.from(Array(mid).keys()));
-  }, []);
+      if (getDay(d) != 0) {
+        for (let i = getDay(d); i < 7; i++) {
+          end++;
+        }
+      }
+
+      if (start + mid + end !== 42) {
+        end += 7;
+      }
+
+      let midArr = [];
+
+      // create [{date: 1}, {date: 2}, {date: 3} ...]
+      for (var i = 0; i < mid; i++) {
+        midArr.push({
+          date: i + 1,
+        });
+      }
+
+      const d1 = new Date(year, month);
+      const currentMonthNote = allMonthNotes?.find((n) => +n.created === +d1);
+
+      if (currentMonthNote) {
+        currentMonthNote.notes.forEach((note) => {
+          midArr[note.date.getDate() - 1].note = note;
+        });
+      }
+
+      setDummyStart(Array.from(Array(start).keys()));
+      setDummyEnd(Array.from(Array(end).keys()));
+      setItems(midArr);
+    },
+    [allMonthNotes]
+  );
 
   function getDay(date) {
     // get day number from 0 (monday) to 6 (sunday)
@@ -70,7 +95,7 @@ const CalendarItems = () => {
 
   useEffect(() => {
     createCalendar(date.year, date.month);
-  }, [createCalendar, date.year, date.month]);
+  }, [createCalendar, date.year, date.month, allMonthNotes]);
 
   function changeMonth(month) {
     if (month === date.month) return;
@@ -89,9 +114,9 @@ const CalendarItems = () => {
     setDate({ month: 0, year: d.getFullYear() });
   }
 
-  function showNoteFormHandler(day) {
+  function showNoteFormHandler(day, note) {
     const d = new Date(date.year, date.month, day);
-
+    setCurrNote(note);
     setShowNoteForm(true);
     setSelectedDate(d);
   }
@@ -107,7 +132,11 @@ const CalendarItems = () => {
       >
         <StyledPopup ref={nodeRef1}>
           <NoteForm
-            onClose={() => setShowNoteForm(false)}
+            onClose={() => {
+              setShowNoteForm(false);
+              setCurrNote(null);
+            }}
+            currNote={currNote}
             date={date}
             selectedDate={selectedDate}
           />
@@ -135,9 +164,10 @@ const CalendarItems = () => {
           return (
             <StyledCalendarItem
               key={i + "mid"}
-              onClick={() => showNoteFormHandler(i + 1)}
+              onClick={() => showNoteFormHandler(i + 1, item.note)}
+              hasNote={!!item.note}
             >
-              <span>{i + 1}</span>
+              <span>{item.date}</span>
             </StyledCalendarItem>
           );
         })}
