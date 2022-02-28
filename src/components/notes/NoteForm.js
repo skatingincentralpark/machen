@@ -71,7 +71,7 @@ const NoteForm = ({
 
         setAllMonthNotes((prevAllMonthNotes) => {
           let noteIndex;
-          let allMonthNotes = prevAllMonthNotes.map((monthNote) => {
+          let newState = prevAllMonthNotes.map((monthNote) => {
             if (+monthNote.created === +firstDayOfMonth) {
               noteIndex = monthNote.notes.findIndex(
                 (note) => +note.date === +selectedDate
@@ -80,39 +80,56 @@ const NoteForm = ({
             return monthNote;
           });
 
-          const monthNoteIndex = allMonthNotes.findIndex(
+          const monthNoteIndex = newState.findIndex(
             (monthNote) =>
               monthNote.created.toString() === firstDayOfMonth.toString()
           );
 
-          allMonthNotes[monthNoteIndex].notes[noteIndex] = newNote;
+          newState[monthNoteIndex].notes[noteIndex] = newNote;
 
-          return allMonthNotes;
+          return newState;
         });
 
         return;
       }
 
       // 2.2) If monthNotes exists => push new note to array
-      if (!!ids.length && !existingNote) {
+      if (ids.length > 0 && !existingNote) {
         const monthNotesRef = doc(db, "monthNotes", ids[0]);
 
         await updateDoc(monthNotesRef, {
           notes: arrayUnion(newNote),
         });
 
+        setAllMonthNotes((prevAllMonthNotes) => {
+          let newState = prevAllMonthNotes.map((x) => x);
+          const monthNoteIndex = prevAllMonthNotes.findIndex(
+            (monthNote) =>
+              monthNote.created.toString() === firstDayOfMonth.toString()
+          );
+
+          newState[monthNoteIndex].notes.push(newNote);
+          return newState;
+        });
+
         return;
       }
 
       // 3) Create new month note (group of notes)
-      const newMonthNotes = {
-        user: user.uid,
-        notes: [newNote],
-        created: Timestamp.fromDate(firstDayOfMonth).toDate(),
-      };
+      if (ids.length === 0) {
+        const newMonthNotes = {
+          user: user.uid,
+          notes: [newNote],
+          created: Timestamp.fromDate(firstDayOfMonth).toDate(),
+        };
 
-      const docRef = await addDoc(collection(db, "monthNotes"), newMonthNotes);
-      console.log(`Success, doc id is ${docRef.id}`);
+        await addDoc(collection(db, "monthNotes"), newMonthNotes);
+
+        setAllMonthNotes((prevAllMonthNotes) => [
+          ...prevAllMonthNotes,
+          newMonthNotes,
+        ]);
+      }
     } catch (err) {
       console.log(err.message);
     }

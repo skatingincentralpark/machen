@@ -311,7 +311,7 @@ const TextEditor = ({
         <NoteFormRight>
           <NoteFormButton onClick={saveText}>
             {loading ? (
-              <div class="lds-ring">
+              <div className="lds-ring">
                 <div></div>
                 <div></div>
                 <div></div>
