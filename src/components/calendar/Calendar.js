@@ -4,11 +4,9 @@ import { collection, query, where, getDocs } from "firebase/firestore";
 import { db } from "../../utils/firebase";
 
 import { CalendarGrid, StyledCalendarTopBar } from "./Calendar.styled";
-import { StyledAllNotes } from "../notes/Notes.styled";
 
 import CalendarItems from "./CalendarItems";
 import CalendarRightBar from "./CalendarRightBar";
-import AllNotes from "../notes/AllNotes";
 
 import useAuth from "../../hooks/auth";
 
@@ -24,9 +22,6 @@ const Calendar = () => {
 
   // UseAuth
   const { user } = useAuth();
-
-  // To prevent findDOMNode depreciation warnings from react-transition-group
-  const nodeRef1 = useRef(null);
 
   // Firestore (getting all monthNotes)
   useEffect(() => {
@@ -69,21 +64,14 @@ const Calendar = () => {
         ))}
       </StyledCalendarTopBar>
 
-      <CSSTransition
-        in={showAllNotes}
-        timeout={200}
-        classNames="fadeSlideDown"
-        unmountOnExit
-        nodeRef={nodeRef1}
-      >
-        <StyledAllNotes ref={nodeRef1}>
-          <AllNotes onClose={() => setShowAllNotes(false)} />
-        </StyledAllNotes>
-      </CSSTransition>
-
       <CalendarRightBar onClick={() => setShowAllNotes(true)} />
 
-      <CalendarItems allMonthNotes={allMonthNotes} />
+      <CalendarItems
+        allMonthNotes={allMonthNotes}
+        setAllMonthNotes={setAllMonthNotes}
+        showAllNotes={showAllNotes}
+        setShowAllNotes={setShowAllNotes}
+      />
     </CalendarGrid>
   );
 };

@@ -1,6 +1,9 @@
-import { createGlobalStyle } from "styled-components";
+import { createGlobalStyle, css } from "styled-components";
 
-const GlobalStyles = createGlobalStyle`
+const GlobalStyles = createGlobalStyle`${css`
+  p {
+    font: mono;
+  }
   * {
     box-sizing: border-box;
   }
@@ -26,12 +29,19 @@ const GlobalStyles = createGlobalStyle`
     color: ${({ theme }) => theme.colors.body};
   }
   ::selection {
-  background: chartreuse;
+    background: chartreuse;
+  }
+  * {
+    line-height: 1.3;
   }
   p {
     line-height: 1.5;
   }
-  h1, h2, h3, h4, h5 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5 {
     margin: 0;
   }
   h1 {
@@ -42,9 +52,6 @@ const GlobalStyles = createGlobalStyle`
   }
   h2 {
     margin: 0;
-  }
-  li {
-    line-height: 1.4;
   }
   button {
     font-family: ${({ theme }) => theme.font.main};
@@ -70,6 +77,7 @@ const GlobalStyles = createGlobalStyle`
   *::-webkit-scrollbar-track {
     background: lightgray;
   }
+`}
 `;
 
 export default GlobalStyles;

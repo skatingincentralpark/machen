@@ -10,7 +10,7 @@ export const StyledPopup = styled.div`
   right: 0;
   background: #f7f7f7;
   margin: 0 0 0 -1px;
-  border: 1px solid #bbbbbb;
+  border: 1px bolid #bbbbbb;
   border-left: none;
   border-top: none;
   border-radius: 0 0 15px 0;
@@ -91,7 +91,7 @@ export const StyledNote = styled.div`
   }
   & > div:nth-child(2) {
     background: white;
-    padding: 1rem 2rem;
+    padding: 1rem 1.5rem;
   }
 `;
 
@@ -130,9 +130,9 @@ export const EditorWrapper = styled.div`
 
   & > img {
     bottom: 1.5rem;
+    opacity: 0.5;
     position: absolute;
     width: 25%;
-    backdrop-filter: blur(2px);
     z-index: 3;
     height: fit-content;
   }
@@ -203,5 +203,40 @@ export const NoteFormRight = styled.div`
   & button:active * {
     transition: 0.1s;
     transform: scale(0.5);
+  }
+
+  .lds-ring {
+    display: inline-block;
+    position: relative;
+    width: 50px;
+    height: 50px;
+  }
+  .lds-ring div {
+    box-sizing: border-box;
+    display: block;
+    position: absolute;
+    height: 2rem;
+    width: 2rem;
+    border: 6px solid #fff;
+    border-radius: 50%;
+    animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+    border-color: lightgray transparent transparent transparent;
+  }
+  .lds-ring div:nth-child(1) {
+    animation-delay: -0.45s;
+  }
+  .lds-ring div:nth-child(2) {
+    animation-delay: -0.3s;
+  }
+  .lds-ring div:nth-child(3) {
+    animation-delay: -0.15s;
+  }
+  @keyframes lds-ring {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
   }
 `;

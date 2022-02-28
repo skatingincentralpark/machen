@@ -17,7 +17,13 @@ import useAuth from "../../hooks/auth";
 import TextEditor from "./TextEditor";
 import { StyledNoteForm } from "./Notes.styled";
 
-const NoteForm = ({ onClose, date, selectedDate, currNote }) => {
+const NoteForm = ({
+  onClose,
+  date,
+  selectedDate,
+  currNote,
+  setAllMonthNotes,
+}) => {
   const { user } = useAuth();
 
   // Save Note
@@ -62,6 +68,27 @@ const NoteForm = ({ onClose, date, selectedDate, currNote }) => {
         batch.update(monthNotesRef, { notes: arrayUnion(newNote) });
 
         await batch.commit();
+
+        setAllMonthNotes((prevAllMonthNotes) => {
+          let noteIndex;
+          let allMonthNotes = prevAllMonthNotes.map((monthNote) => {
+            if (+monthNote.created === +firstDayOfMonth) {
+              noteIndex = monthNote.notes.findIndex(
+                (note) => +note.date === +selectedDate
+              );
+            }
+            return monthNote;
+          });
+
+          const monthNoteIndex = allMonthNotes.findIndex(
+            (monthNote) =>
+              monthNote.created.toString() === firstDayOfMonth.toString()
+          );
+
+          allMonthNotes[monthNoteIndex].notes[noteIndex] = newNote;
+
+          return allMonthNotes;
+        });
 
         return;
       }

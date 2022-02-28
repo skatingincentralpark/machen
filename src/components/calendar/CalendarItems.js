@@ -6,13 +6,19 @@ import {
   StyledCalendarItems,
   StyledYearSelector,
 } from "./Calendar.styled";
-import { StyledPopup } from "../notes/Notes.styled";
+import { StyledPopup, StyledAllNotes } from "../notes/Notes.styled";
 
 import CalendarLeftBar from "./CalendarLeftBar";
 import NoteForm from "../notes/NoteForm";
 import YearSelector from "./YearSelector";
+import AllNotes from "../notes/AllNotes";
 
-const CalendarItems = ({ allMonthNotes }) => {
+const CalendarItems = ({
+  allMonthNotes,
+  setAllMonthNotes,
+  showAllNotes,
+  setShowAllNotes,
+}) => {
   // @@     UI states
   const [showNoteForm, setShowNoteForm] = useState(false);
   const [showYearSelector, setShowYearSelector] = useState(false);
@@ -30,6 +36,7 @@ const CalendarItems = ({ allMonthNotes }) => {
   // @@     Node refs
   const nodeRef1 = useRef(null);
   const nodeRef2 = useRef(null);
+  const nodeRef3 = useRef(null);
 
   // @@     Create Calendar
   // @@     Creates 3 arrays, dummy start, actual items (with notes/habits if exists), dummy end
@@ -114,8 +121,8 @@ const CalendarItems = ({ allMonthNotes }) => {
     setDate({ month: 0, year: d.getFullYear() });
   }
 
-  function showNoteFormHandler(day, note) {
-    const d = new Date(date.year, date.month, day);
+  function showNoteFormHandler(year = null, month = null, day, note) {
+    const d = new Date(year || date.year, month || date.month, day);
     setCurrNote(note);
     setShowNoteForm(true);
     setSelectedDate(d);
@@ -137,10 +144,27 @@ const CalendarItems = ({ allMonthNotes }) => {
               setCurrNote(null);
             }}
             currNote={currNote}
+            setAllMonthNotes={setAllMonthNotes}
             date={date}
             selectedDate={selectedDate}
           />
         </StyledPopup>
+      </CSSTransition>
+
+      <CSSTransition
+        in={showAllNotes}
+        timeout={200}
+        classNames="fadeSlideDown"
+        unmountOnExit
+        nodeRef={nodeRef3}
+      >
+        <StyledAllNotes ref={nodeRef3}>
+          <AllNotes
+            showNoteFormHandler={showNoteFormHandler}
+            onClose={() => setShowAllNotes(false)}
+            allMonthNotes={allMonthNotes}
+          />
+        </StyledAllNotes>
       </CSSTransition>
 
       <CSSTransition
@@ -164,7 +188,7 @@ const CalendarItems = ({ allMonthNotes }) => {
           return (
             <StyledCalendarItem
               key={i + "mid"}
-              onClick={() => showNoteFormHandler(i + 1, item.note)}
+              onClick={() => showNoteFormHandler(null, null, i + 1, item.note)}
               hasNote={!!item.note}
             >
               <span>{item.date}</span>

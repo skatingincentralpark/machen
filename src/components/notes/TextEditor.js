@@ -36,6 +36,8 @@ const TextEditor = ({
     return EditorState.createWithContent(converted);
   });
 
+  const [loading, setLoading] = useState(false);
+
   const newDateString = `${selectedDate.toLocaleString("en-us", {
     weekday: "short",
   })} ${selectedDate.getDate()} ${selectedDate.toLocaleString("default", {
@@ -203,12 +205,15 @@ const TextEditor = ({
     },
   };
 
-  const saveText = () => {
+  const saveText = async () => {
+    setLoading(true);
     // Preventing save while site is still being developed
     const contentState = editorState.getCurrentContent();
     const rawContentState = convertToRaw(contentState);
 
-    onSave(rawContentState);
+    await onSave(rawContentState);
+    setLoading(false);
+    onClose();
   };
 
   const hasStyle = (style) => editorState.getCurrentInlineStyle().has(style);
@@ -305,7 +310,16 @@ const TextEditor = ({
       {!isLanding && (
         <NoteFormRight>
           <NoteFormButton onClick={saveText}>
-            <img src="/svg/tick.svg" alt="" />
+            {loading ? (
+              <div class="lds-ring">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+              </div>
+            ) : (
+              <img src="/svg/tick.svg" alt="" />
+            )}
           </NoteFormButton>
           <NoteFormButton onClick={onClose}>
             <img src="/svg/closeButton.svg" alt="" />
