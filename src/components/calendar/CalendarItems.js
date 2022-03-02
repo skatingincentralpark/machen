@@ -65,9 +65,11 @@ const CalendarItems = ({
       }
 
       if (start + mid + end !== 42) {
+        if (start + mid + end !== 35) {
+          end += 7;
+        }
         end += 7;
       }
-
       let midArr = [];
 
       // create [{date: 1}, {date: 2}, {date: 3} ...]
