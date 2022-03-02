@@ -83,6 +83,18 @@ export const NoteFormButton = styled.button`
   cursor: pointer;
 `;
 
+export const DeleteBtn = styled(NoteFormButton)`
+  writing-mode: vertical-rl;
+  transform: rotate(90deg);
+  text-orientation: mixed;
+  text-align: right;
+  margin-top: 1rem;
+  color: red;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+`;
+
 export const LeftBarButton = styled(Button)`
   background: ${({ isSelected }) => isSelected && "lightgray"};
 `;

@@ -18,12 +18,13 @@ import {
   EditorBtn,
   NoteFormRight,
 } from "./Notes.styled";
-import { NoteFormButton } from "../styles/Button.styled";
+import { NoteFormButton, DeleteBtn } from "../styles/Button.styled";
 
 import Dropdown, { DropdownBtn } from "../ui/Dropdown";
 
 const TextEditor = ({
   onSave = () => {},
+  onDelete = () => {},
   onClose = () => {},
   selectedDate = new Date(2022, 0, 1),
   isLanding = false,
@@ -216,6 +217,13 @@ const TextEditor = ({
     onClose();
   };
 
+  const deleteText = async () => {
+    setLoading(true);
+    await onDelete();
+    setLoading(false);
+    onClose();
+  };
+
   const hasStyle = (style) => editorState.getCurrentInlineStyle().has(style);
   const hasBlockType = (blocktype) =>
     RichUtils.getCurrentBlockType(editorState) === blocktype;
@@ -309,21 +317,31 @@ const TextEditor = ({
 
       {!isLanding && (
         <NoteFormRight>
-          <NoteFormButton onClick={saveText}>
-            {loading ? (
-              <div className="lds-ring">
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-              </div>
-            ) : (
-              <img src="/svg/tick.svg" alt="" />
-            )}
-          </NoteFormButton>
-          <NoteFormButton onClick={onClose}>
-            <img src="/svg/closeButton.svg" alt="" />
-          </NoteFormButton>
+          <div>
+            <NoteFormButton onClick={saveText}>
+              {loading ? (
+                <div className="lds-ring">
+                  <div></div>
+                  <div></div>
+                  <div></div>
+                  <div></div>
+                </div>
+              ) : (
+                <img src="/svg/tick.svg" alt="" />
+              )}
+            </NoteFormButton>
+            <NoteFormButton onClick={onClose}>
+              <img src="/svg/closeButton.svg" alt="" />
+            </NoteFormButton>
+          </div>
+          {currNote && (
+            <DeleteBtn
+              style={{ marginTop: "1rem", color: "red" }}
+              onClick={deleteText}
+            >
+              <span>Delete</span>
+            </DeleteBtn>
+          )}
         </NoteFormRight>
       )}
     </>

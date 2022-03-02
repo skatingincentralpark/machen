@@ -191,12 +191,13 @@ export const NoteFormRight = styled.div`
   display: flex;
   flex-direction: column;
   padding-left: 1rem;
+  justify-content: space-between;
 
   & * {
     transition: 0.5s;
   }
 
-  & > button:first-child {
+  & > div > button:first-child {
     margin-bottom: 1rem;
   }
 
