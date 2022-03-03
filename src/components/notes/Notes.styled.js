@@ -209,8 +209,8 @@ export const NoteFormRight = styled.div`
   .lds-ring {
     display: inline-block;
     position: relative;
-    width: 50px;
-    height: 50px;
+    height: 2rem;
+    width: 2rem;
   }
   .lds-ring div {
     box-sizing: border-box;

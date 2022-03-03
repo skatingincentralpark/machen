@@ -1,5 +1,9 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { CSSTransition } from "react-transition-group";
+import ReactTooltip from "react-tooltip";
+import draftToHtml from "draftjs-to-html";
+import styled from "styled-components";
+import useWindowDimensions from "../../hooks/useWindowDimensions";
 
 import {
   StyledCalendarItem,
@@ -30,8 +34,9 @@ const CalendarItems = ({
   const [dummyItemsEnd, setDummyEnd] = useState([]);
   const [items, setItems] = useState([]);
 
-  // @@     Date states
+  // @@     Selected Notes
   const [currNote, setCurrNote] = useState(undefined); // current note being edited
+  const [hoveredNote, setHoveredNote] = useState(undefined); // current note being edited
 
   // @@     Node refs
   const nodeRef1 = useRef(null);
@@ -130,6 +135,21 @@ const CalendarItems = ({
     setSelectedDate(d);
   }
 
+  // Window Dimensions Hook
+  const { height, width } = useWindowDimensions();
+  console.log(height, width);
+
+  // React tooltip (rebuild for dynamic content)
+  useEffect(() => {
+    ReactTooltip.rebuild();
+  }, [items]);
+
+  // DraftJS to Html
+  const onMouseEnter = (item) => {
+    if (width < 850 || !item.note) return;
+    setHoveredNote(draftToHtml(item.note.rawContent));
+  };
+
   return (
     <>
       <CSSTransition
@@ -181,6 +201,8 @@ const CalendarItems = ({
         </StyledYearSelector>
       </CSSTransition>
 
+      <ReactTooltipStyled />
+
       <StyledCalendarItems>
         {dummyItemsStart?.map((x, i) => (
           <StyledCalendarItem key={i + "start"} dummy={true} />
@@ -192,6 +214,12 @@ const CalendarItems = ({
               key={i + "mid"}
               onClick={() => showNoteFormHandler(null, null, i + 1, item.note)}
               hasNote={!!item.note}
+              data-tip={!!item.note ? hoveredNote : ""}
+              data-html={true}
+              data-tip-disable={width < 850 ? true : false}
+              onMouseEnter={() => {
+                onMouseEnter(item);
+              }}
             >
               <span>{item.date}</span>
             </StyledCalendarItem>
@@ -217,3 +245,20 @@ const CalendarItems = ({
 };
 
 export default CalendarItems;
+
+const ReactTooltipStyled = styled(ReactTooltip)`
+  & {
+    max-width: 50rem;
+  }
+
+  & a {
+    color: red;
+  }
+
+  padding: 0.3rem 1rem;
+  &.type-dark.place-top {
+    /* &:after {
+      border-top-color: blue;
+    } */
+  }
+`;
