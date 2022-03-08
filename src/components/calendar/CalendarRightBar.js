@@ -7,10 +7,7 @@ const CalendarRightBar = ({ onClick }) => {
     <StyledCalendarRightBar>
       <div>
         <h2>Mon 19 Apr</h2>
-        <p>
-          Why do we quit? Everytime we exert effort, noradrenaline is released.
-          At some point, enough is released that we quit.
-        </p>
+        <p>~ This is a WIP section!</p>
         <p>
           Dopamine can lower those levels, increasing our tolerance for pain and
           ability to push further. Self-rewarding can be used to achieve this.

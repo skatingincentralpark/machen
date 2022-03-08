@@ -49,3 +49,15 @@ export const AuthButton = styled(StyledButton)`
     border: 1px solid white;
   }
 `;
+
+export const StyledLink = styled.span`
+  color: blue;
+  cursor: pointer;
+  transition: 0.5s;
+  border-radius: 3px;
+
+  &:active {
+    background: blue;
+    transition: 0.1s;
+  }
+`;
